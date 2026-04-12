@@ -1,75 +1,67 @@
 import { NextRequest } from "next/server";
-import { initializeApp, cert } from "firebase-admin/app";
-import { getStorage } from "firebase-admin/storage";
+import {
+  S3Client,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
 
-let adminInitialized = false;
-
-function initAdmin() {
-  if (adminInitialized) return;
-  try {
-    const privateKey = (process.env.FIREBASE_PRIVATE_KEY || "").replace(/\\n/g, "\n");
-    initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_PROJECT_ID || "th-mok",
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey,
-      }),
-      storageBucket: process.env.FIREBASE_STORAGE_BUCKET || "th-mok.firebasestorage.app",
-    });
-    adminInitialized = true;
-    console.log("Firebase Admin initialized");
-  } catch (e: any) {
-    console.error("Firebase init error:", e?.message);
-  }
-}
+const r2Client = new S3Client({
+  region: "auto",
+  endpoint: `https://${process.env.R2_ACCOUNT_ID || "6fec257ce1fa5321a4fa21e2d8e87438"}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || "",
+  },
+  forcePathStyle: true,
+});
 
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ path: string[] }> }
 ) {
-  initAdmin();
-
   const { path } = await context.params;
   const key = path.join("/");
-  if (!key) {
-    return new Response("No path provided", { status: 400 });
-  }
 
-  if (!adminInitialized) {
-    return new Response("Firebase init failed", { status: 500 });
+  if (!key) {
+    return new Response("No path", { status: 400 });
   }
 
   try {
-    const storage = getStorage();
-    const bucket = storage.bucket();
-    const file = bucket.file(key);
+    const command = new GetObjectCommand({
+      Bucket: process.env.R2_BUCKET || "mok-images",
+      Key: key,
+    });
 
-    const [data, meta] = await Promise.all([
-      file.download(),
-      file.getMetadata(),
-    ]);
+    const response = await r2Client.send(command);
 
-    const isHtml =
-      data[0].slice(0, 5).toString() === "<!doc" ||
-      data[0].slice(0, 5).toString() === "<!HTM";
+    const stream = response.Body as AsyncIterable<Uint8Array>;
+    const chunks: Uint8Array[] = [];
 
-    if (isHtml) {
-      console.log(`WAF blocked ${key} - got HTML instead of image`);
-      return new Response("Image blocked by WAF", { status: 502 });
+    for await (const chunk of stream) {
+      chunks.push(chunk);
     }
 
-    const imageData = new Uint8Array(data[0]);
-    return new Response(imageData as unknown as BodyInit, {
+    const totalLength = chunks.reduce((acc, c) => acc + c.length, 0);
+    const result = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const chunk of chunks) {
+      result.set(chunk, offset);
+      offset += chunk.length;
+    }
+
+    const contentType =
+      response.ContentType || "image/jpeg";
+
+    return new Response(result as unknown as BodyInit, {
       status: 200,
       headers: {
-        "Content-Type": meta[0].contentType || "image/jpeg",
+        "Content-Type": contentType,
         "Cache-Control": "public, max-age=86400",
         "Access-Control-Allow-Origin": "*",
-        "X-Image-Size": String(data[0].length),
+        "Content-Length": String(totalLength),
       },
     });
   } catch (e: any) {
-    console.error(`Download error for ${key}:`, e?.code, e?.message);
-    return new Response(`Error: ${e?.code} - ${e?.message}`, { status: 502 });
+    console.error("R2 proxy error:", e.message);
+    return new Response(`R2 error: ${e.message}`, { status: 502 });
   }
 }

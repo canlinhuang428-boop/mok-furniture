@@ -1,0 +1,8 @@
+name = "mok-images"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# R2 bucket binding - this is the internal R2 access, no DNS needed!
+[[r2_buckets]]
+binding = "MOK_IMAGES"
+bucket_name = "mok-images"
