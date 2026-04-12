@@ -255,14 +255,12 @@ function MOKApp() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // ==========================================
-  // 加载产品数据
+  // 加载产品数据（静态文件，秒开）
   // ==========================================
   useEffect(() => {
-    if (!authLoading) {
-      setProducts(PRODUCTS as Product[]);
-      setLoading(false);
-    }
-  }, [authLoading]);
+    setProducts(PRODUCTS as Product[]);
+    setLoading(false);
+  }, []);
 
   // ==========================================
   // 加载购物车
