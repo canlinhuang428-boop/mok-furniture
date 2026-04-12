@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 产品：所有人可读，登录后可写
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update, delete: if request.auth != null;
+    }
+    
+    // 分类：所有人可读，登录后可写
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // 购物车：只有本人可读写
+    match /carts/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // 订单：登录后可提交和读取
+    match /orders/{orderId} {
+      allow create, read: if request.auth != null;
+      allow update: if request.auth != null;
+    }
+  }
+}

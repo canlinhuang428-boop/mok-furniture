@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Firebase (保护服务账号密钥)
+firebase-admin.json
+
+# Next.js
+.next/
+out/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+
+# Build
+dist/
