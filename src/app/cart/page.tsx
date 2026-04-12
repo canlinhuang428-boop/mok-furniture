@@ -15,6 +15,8 @@ function CartContent() {
   const { user } = useAuth();
   const [cart, setCart] = useState<Cart | null>(null);
   const [products, setProducts] = useState<Record<string, Product>>({});
+  if (!user) return null;
+
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -154,7 +156,7 @@ function CartContent() {
                     <h3 className="font-medium text-gray-800 text-sm th-text">{p.name_th}</h3>
                     <p className="text-xs text-gray-400">{p.sku} · {p.size}</p>
                     <p className="text-orange-500 font-bold mt-1">
-                      ฿{p.price.toLocaleString()}
+                      ฿{(p.price ?? 0).toLocaleString()}
                     </p>
                   </div>
                   <div className="flex flex-col items-end justify-between">

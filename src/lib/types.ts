@@ -14,6 +14,13 @@ export interface Product {
   stock_status: "in_stock" | "out_of_stock";
   price?: number;
   original_price?: number;
+  // admin page fields
+  category?: string;
+  image?: string;
+  status?: string;
+  sort?: number;
+  tags?: string[];
+  sort_order?: number;
 }
 
 export interface Category {
@@ -40,7 +47,9 @@ export interface Order {
   user_id: string;
   name: string;
   phone: string;
-  note: string;
+  note?: string;
+  address?: string;
+  remark?: string;
   items: CartItem[];
   status: "pending" | "contacted" | "completed";
   created_at: string;

@@ -282,7 +282,8 @@ function MOKApp() {
   useEffect(() => {
     if (!user) return;
     async function loadCart() {
-      const snap = await getDoc(doc(db, "carts", user.uid));
+      const uid = user!.uid;
+      const snap = await getDoc(doc(db, "carts", uid));
       if (snap.exists()) {
         const data = snap.data() as Cart;
         // 把 product_id 转成完整 product 对象
@@ -313,7 +314,7 @@ function MOKApp() {
   async function syncCart(newCart: typeof cart) {
     if (!user) return;
     setCart(newCart);
-    await setDoc(doc(db, "carts", user.uid), {
+    await setDoc(doc(db, "carts", user!.uid), {
       items: newCart.map(i => ({ product_id: i.product.id, qty: i.qty })),
       updated_at: serverTimestamp(),
     }, { merge: true });
@@ -430,8 +431,9 @@ function MOKApp() {
 
   async function submitOrder() {
     if (!user || cart.length === 0) return;
+    const uid = user.uid;
     await addDoc(collection(db, "orders"), {
-      user_id: user.uid,
+      user_id: uid,
       name: customerName,
       phone: customerPhone,
       note: customerNote,

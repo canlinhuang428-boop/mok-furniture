@@ -36,11 +36,11 @@ export default function AdminProducts() {
   function openEdit(p: Product) {
     setEditing(p);
     setForm({
-      id: p.id, name_th: p.name_th, name_en: p.name_en,
-      category: p.category, sku: p.sku, size: p.size,
-      price: p.price, original_price: p.original_price,
-      image: p.image, status: p.status, sort: p.sort,
-      tags: p.tags.join(", "),
+      id: p.id ?? "", name_th: p.name_th ?? "", name_en: p.name_en ?? "",
+      category: p.category ?? "", sku: p.sku ?? "", size: p.size ?? "",
+      price: p.price ?? 0, original_price: p.original_price ?? 0,
+      image: p.image ?? "", status: typeof p.status === "boolean" ? p.status : true, sort: p.sort ?? 1,
+      tags: (p.tags ?? []).join(", "),
     });
     setShowForm(true);
   }
@@ -116,7 +116,7 @@ export default function AdminProducts() {
                 <td className="p-3 text-gray-500">{p.sku}</td>
                 <td className="p-3">
                   <span className="text-orange-500 font-bold">{p.price}</span>
-                  {p.original_price > p.price && (
+                  {(p.original_price ?? 0) > (p.price ?? 0) && (
                     <span className="text-gray-400 line-through text-xs ml-1">{p.original_price}</span>
                   )}
                 </td>

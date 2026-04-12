@@ -53,8 +53,8 @@ export default function ProductCard({ product }: Props) {
     }
   }
 
-  const discount = product.original_price > product.price
-    ? Math.round((1 - product.price / product.original_price) * 100)
+  const discount = (product.original_price ?? 0) > (product.price ?? 0)
+    ? Math.round((1 - (product.price ?? 0) / (product.original_price ?? 1)) * 100)
     : 0;
 
   return (
@@ -86,11 +86,11 @@ export default function ProductCard({ product }: Props) {
         {/* 价格 */}
         <div className="mb-2">
           <span className="text-orange-500 font-bold text-lg">
-            ฿{product.price.toLocaleString()}
+            ฿{(product.price ?? 0).toLocaleString()}
           </span>
-          {product.original_price > product.price && (
+          {(product.original_price ?? 0) > (product.price ?? 0) && (
             <span className="text-gray-400 text-xs line-through ml-2">
-              ฿{product.original_price.toLocaleString()}
+              ฿{(product.original_price ?? 0).toLocaleString()}
             </span>
           )}
         </div>

@@ -85,7 +85,7 @@ export default function AdminCategories() {
                 <td className="p-3 text-gray-500">{c.id}</td>
                 <td className="p-3 font-medium text-gray-800 th-text">{c.name_th}</td>
                 <td className="p-3">
-                  <button onClick={() => { setEditing(c); setName_th(c.name_th); setSort(c.sort); }} className="text-blue-500 hover:underline mr-3">编辑</button>
+                  <button onClick={() => { setEditing(c); setName_th(c.name_th); setSort(c.sort ?? 1); }} className="text-blue-500 hover:underline mr-3">编辑</button>
                   <button onClick={() => handleDelete(c.id)} className="text-red-500 hover:underline">删除</button>
                 </td>
               </tr>
