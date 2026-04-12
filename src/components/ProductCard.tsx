@@ -62,7 +62,7 @@ export default function ProductCard({ product }: Props) {
       {/* 产品图 */}
       <div className="relative aspect-square bg-gray-100">
         <Image
-          src={product.image || `https://placehold.co/400x400?text=${product.sku}`}
+          src={product.images?.[0] || product.image || `https://placehold.co/400x400?text=${product.sku}`}
           alt={product.name_th}
           fill
           className="object-cover"
