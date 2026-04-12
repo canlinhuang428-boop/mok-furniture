@@ -254,21 +254,24 @@ function MOKApp() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // ==========================================
-  // 加载产品数据
+  // 加载产品数据（优先从本地静态文件）
   // ==========================================
   useEffect(() => {
     async function loadProducts() {
       try {
-        const snap = await getDocs(collection(db, "products"));
-        if (snap.empty) {
-          // 用本地mock数据
-          setProducts([]);
-        } else {
-          setProducts(snap.docs.map(d => ({ id: d.id, ...d.data() } as Product)));
-        }
+        // 优先从本地静态文件加载（绕过 Firestore 查询问题）
+        const localData = await import("@/data/products.json");
+        setProducts(localData.default as Product[]);
+        setLoading(false);
+        return;
       } catch (e) {
-        console.error("加载产品失败", e);
-        setProducts([]);
+        console.warn("本地数据加载失败，尝试 Firestore", e);
+      }
+      try {
+        const snap = await getDocs(collection(db, "products"));
+        setProducts(snap.docs.map(d => ({ id: d.id, ...d.data() } as Product)));
+      } catch (e2) {
+        console.error("Firestore 也失败", e2);
       } finally {
         setLoading(false);
       }

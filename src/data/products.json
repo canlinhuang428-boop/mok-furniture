@@ -1,0 +1,287 @@
+[
+  {
+    "id": "B01A",
+    "category": "bed",
+    "sku": "B01A",
+    "size": "110x190x80 cm",
+    "price": 3990,
+    "original_price": 4990,
+    "image": "https://placehold.co/600x400?text=B01A",
+    "status": true,
+    "sort": 1,
+    "tags": [
+      "พร้อมส่ง",
+      "เก็บเงินปลายทาง"
+    ],
+    "name_zh": "3.5尺铁床 B01A",
+    "tags_th": [
+      "พร้อมส่ง",
+      "เก็บเงินปลายทาง"
+    ],
+    "featured": false,
+    "stock_status": "in_stock",
+    "category_id": "cat_bed",
+    "tags_en": [
+      "In Stock",
+      "COD Available"
+    ],
+    "name_th": "เตียงเหล็ก 3.5 ฟุต รุ่น B01A",
+    "tags_zh": [
+      "有货",
+      "货到付款"
+    ],
+    "name_en": "Steel Bed 3.5ft B01A",
+    "sort_order": 0,
+    "images": [
+      "https://placehold.co/600x400?text=B01A"
+    ]
+  },
+  {
+    "id": "B02A",
+    "category": "bed",
+    "sku": "B02A",
+    "size": "152x190x80 cm",
+    "price": 4990,
+    "original_price": 5990,
+    "image": "https://placehold.co/600x400?text=B02A",
+    "status": true,
+    "sort": 2,
+    "tags": [
+      "พร้อมส่ง"
+    ],
+    "name_zh": "5尺铁床 B02A",
+    "tags_th": [
+      "พร้อมส่ง"
+    ],
+    "featured": false,
+    "stock_status": "in_stock",
+    "category_id": "cat_bed",
+    "tags_en": [
+      "In Stock"
+    ],
+    "name_th": "เตียงเหล็ก 5 ฟุต รุ่น B02A",
+    "tags_zh": [
+      "有货"
+    ],
+    "name_en": "Steel Bed 5ft B02A",
+    "sort_order": 1,
+    "images": [
+      "https://placehold.co/600x400?text=B02A"
+    ]
+  },
+  {
+    "id": "S01A",
+    "category": "shelf",
+    "sku": "S01A",
+    "size": "60x30x150 cm",
+    "price": 1290,
+    "original_price": 1590,
+    "image": "https://placehold.co/600x400?text=S01A",
+    "status": true,
+    "sort": 1,
+    "tags": [
+      "พร้อมส่ง",
+      "ประหยัด"
+    ],
+    "name_zh": "四层铁货架 S01A",
+    "tags_th": [
+      "พร้อมส่ง",
+      "ประหยัด"
+    ],
+    "featured": false,
+    "stock_status": "in_stock",
+    "category_id": "cat_rack",
+    "tags_en": [
+      "In Stock",
+      "Best Value"
+    ],
+    "name_th": "ชั้นวางเหล็ก 4 ชั้น รุ่น S01A",
+    "tags_zh": [
+      "有货",
+      "超值"
+    ],
+    "name_en": "Steel Shelf 4-Tier S01A",
+    "sort_order": 2,
+    "images": [
+      "https://placehold.co/600x400?text=S01A"
+    ]
+  },
+  {
+    "id": "T01A",
+    "name_en": "Folding Steel Table T01A",
+    "category": "table",
+    "sku": "T01A",
+    "size": "60x60x75 cm",
+    "price": 890,
+    "original_price": 1190,
+    "image": "https://placehold.co/600x400?text=T01A",
+    "status": true,
+    "sort": 1,
+    "tags": [
+      "พร้อมส่ง"
+    ],
+    "name_zh": "折叠铁桌 T01A",
+    "tags_th": [
+      "พร้อมส่ง"
+    ],
+    "featured": false,
+    "stock_status": "in_stock",
+    "category_id": "cat_table",
+    "tags_en": [
+      "In Stock"
+    ],
+    "name_th": "โต๊ะเหล็กพับได้ รุ่น T01A",
+    "tags_zh": [
+      "有货"
+    ],
+    "sort_order": 3,
+    "images": [
+      "https://placehold.co/600x400?text=T01A"
+    ]
+  },
+  {
+    "id": "Y06A",
+    "name_th": "ตู้เอกสารเหล็ก 2 บานเปิด",
+    "category": "cabinet",
+    "sku": "Y06A",
+    "size": "85x39x180 cm",
+    "price": 2890,
+    "original_price": 3290,
+    "image": "https://placehold.co/600x400?text=Y06A",
+    "status": true,
+    "sort": 1,
+    "tags": [
+      "พร้อมส่ง",
+      "เก็บเงินปลายทาง"
+    ],
+    "name_zh": "铁皮双门文件柜 Y06A",
+    "tags_th": [
+      "สินค้าขายดี"
+    ],
+    "featured": true,
+    "stock_status": "in_stock",
+    "category_id": "cat_cabinet",
+    "tags_en": [
+      "Best Seller"
+    ],
+    "tags_zh": [
+      "畅销款"
+    ],
+    "name_en": "Steel Filing Cabinet 2 Doors Y06A",
+    "images": [
+      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_1.jpg",
+      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_2.jpg",
+      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_3.jpg",
+      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_4.jpg"
+    ],
+    "sort_order": 4
+  },
+  {
+    "id": "Y08B",
+    "name_th": "ตู้เอกสารเหล็ก 4 บานเปิด",
+    "category": "cabinet",
+    "sku": "Y08B",
+    "size": "120x45x180 cm",
+    "price": 4590,
+    "original_price": 5290,
+    "image": "https://placehold.co/600x400?text=Y08B",
+    "status": true,
+    "sort": 2,
+    "tags": [
+      "พร้อมส่ง"
+    ],
+    "name_zh": "铁皮四门文件柜 Y08B",
+    "tags_th": [
+      "สินค้าขายดี"
+    ],
+    "featured": false,
+    "stock_status": "in_stock",
+    "category_id": "cat_cabinet",
+    "tags_en": [
+      "Best Seller"
+    ],
+    "tags_zh": [
+      "畅销款"
+    ],
+    "name_en": "Steel Filing Cabinet 4 Doors Y08B",
+    "images": [
+      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y08B_1.jpg",
+      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y08B_2.jpg"
+    ],
+    "sort_order": 5
+  },
+  {
+    "id": "p2",
+    "category_id": "cat_wardrobe",
+    "name_th": "ตู้เสื้อผ้าอเนกประสงค์ รุ่น ZH14",
+    "name_en": "Multi-purpose Wardrobe ZH14",
+    "name_zh": "多功能组合衣柜 ZH14",
+    "sku": "ZH14",
+    "size": "120x50x200 cm",
+    "images": [
+      "https://placehold.co/600x600/fed7aa/ea580c?text=Wardrobe+ZH14"
+    ],
+    "tags_th": [
+      "สินค้าแนะนำ"
+    ],
+    "tags_en": [
+      "Recommended"
+    ],
+    "tags_zh": [
+      "掌柜推荐"
+    ],
+    "featured": true,
+    "stock_status": "in_stock",
+    "sort_order": 6
+  },
+  {
+    "id": "p4",
+    "category_id": "cat_mirror",
+    "name_th": "กระจกเงาเต็มตัว ทรงโค้งมินิมอล",
+    "name_en": "Full Length Arch Mirror",
+    "name_zh": "极简弧顶全身镜",
+    "sku": "MR-CURVE-01",
+    "size": "60x160 cm",
+    "tags_th": [
+      "ยอดฮิต"
+    ],
+    "tags_en": [
+      "Popular"
+    ],
+    "tags_zh": [
+      "爆款"
+    ],
+    "featured": true,
+    "stock_status": "in_stock",
+    "images": [
+      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/MR01_1.jpg",
+      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/MR01_2.jpg",
+      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/MR01_3.jpg"
+    ],
+    "sort_order": 7
+  },
+  {
+    "id": "p7",
+    "category_id": "cat_storage",
+    "name_th": "ตู้เก็บของพลาสติก ฝาฝาใส 6 ลิตร",
+    "name_en": "Plastic Storage Box 6L",
+    "name_zh": "塑料收纳箱 6L",
+    "sku": "ST-6L-01",
+    "size": "30x20x15 cm",
+    "images": [
+      "https://placehold.co/600x600/bfdbfe/3b82f6?text=Storage+6L"
+    ],
+    "tags_th": [
+      "พร้อมส่ง"
+    ],
+    "tags_en": [
+      "In Stock"
+    ],
+    "tags_zh": [
+      "有货"
+    ],
+    "featured": false,
+    "stock_status": "in_stock",
+    "sort_order": 9
+  }
+]
