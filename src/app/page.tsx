@@ -12,6 +12,7 @@ import { collection, getDocs, doc, setDoc, getDoc, addDoc, serverTimestamp, quer
 import { db } from "@/lib/firebase";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { Product, Category, Cart, Lang } from "@/lib/types";
+import { PRODUCTS } from "@/data/products";
 
 // ==========================================
 // 品牌配置
@@ -254,29 +255,13 @@ function MOKApp() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // ==========================================
-  // 加载产品数据（优先从本地静态文件）
+  // 加载产品数据
   // ==========================================
   useEffect(() => {
-    async function loadProducts() {
-      try {
-        // 优先从本地静态文件加载（绕过 Firestore 查询问题）
-        const localData = await import("@/data/products.json");
-        setProducts(localData.default as Product[]);
-        setLoading(false);
-        return;
-      } catch (e) {
-        console.warn("本地数据加载失败，尝试 Firestore", e);
-      }
-      try {
-        const snap = await getDocs(collection(db, "products"));
-        setProducts(snap.docs.map(d => ({ id: d.id, ...d.data() } as Product)));
-      } catch (e2) {
-        console.error("Firestore 也失败", e2);
-      } finally {
-        setLoading(false);
-      }
+    if (!authLoading) {
+      setProducts(PRODUCTS as Product[]);
+      setLoading(false);
     }
-    if (!authLoading) loadProducts();
   }, [authLoading]);
 
   // ==========================================

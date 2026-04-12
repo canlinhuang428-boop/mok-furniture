@@ -17,7 +17,7 @@ export interface Product {
   // admin page fields
   category?: string;
   image?: string;
-  status?: string;
+  status?: string | boolean;
   sort?: number;
   tags?: string[];
   sort_order?: number;
