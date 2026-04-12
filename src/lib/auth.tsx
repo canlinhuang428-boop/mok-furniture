@@ -14,24 +14,27 @@ const AuthContext = createContext<AuthContextType>({ user: null, loading: true }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // 默认false，让产品先显示
 
   useEffect(() => {
-    // 尝试恢复之前的匿名会话
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        setUser(firebaseUser);
-        setLoading(false);
-      } else {
-        // 没有已登录用户 → 匿名登录
-        signInAnonymously(auth)
-          .then((credential) => setUser(credential.user))
-          .catch(console.error)
-          .finally(() => setLoading(false));
-      }
-    });
-
-    return unsubscribe;
+    let cancelled = false;
+    try {
+      const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        if (cancelled) return;
+        if (firebaseUser) {
+          setUser(firebaseUser);
+          setLoading(false);
+        } else {
+          signInAnonymously(auth)
+            .then((credential) => { if (!cancelled) setUser(credential.user); })
+            .catch(() => { if (!cancelled) setLoading(false); })
+            .finally(() => { if (!cancelled) setLoading(false); });
+        }
+      });
+      return () => { cancelled = true; unsubscribe(); };
+    } catch {
+      if (!cancelled) setLoading(false);
+    }
   }, []);
 
   return (
