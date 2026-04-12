@@ -16,7 +16,7 @@ import { Product, Category, Cart, Lang } from "@/lib/types";
 // ==========================================
 // 品牌配置
 // ==========================================
-const BRAND_LOGO_URL = "https://litter.catbox.moe/8z8fb5.jpg";
+const BRAND_LOGO_URL = "https://storage.googleapis.com/th-mok.firebasestorage.app/products/logo.jpg";
 const C = { blue: "#008AD8", orange: "#E86A1A", green: "#38A959", slate: "#0f172a" };
 
 // ==========================================
