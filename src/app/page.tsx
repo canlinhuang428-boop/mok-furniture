@@ -259,7 +259,7 @@ function MOKApp() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        const snap = await getDocs(query(collection(db, "products"), orderBy("sort_order", "asc")));
+        const snap = await getDocs(collection(db, "products"));
         if (snap.empty) {
           // 用本地mock数据
           setProducts([]);
