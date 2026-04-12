@@ -17,7 +17,7 @@ import { PRODUCTS } from "@/data/products";
 // ==========================================
 // 品牌配置
 // ==========================================
-const BRAND_LOGO_URL = "https://storage.googleapis.com/th-mok.firebasestorage.app/products/logo.jpg";
+const BRAND_LOGO_URL = "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/logo.jpg";
 const C = { blue: "#008AD8", orange: "#E86A1A", green: "#38A959", slate: "#0f172a" };
 
 // ==========================================

@@ -171,10 +171,10 @@ export const PRODUCTS: Product[] = [
     ],
     "name_en": "Steel Filing Cabinet 2 Doors Y06A",
     "images": [
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_1.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_2.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_3.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_4.jpg"
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_1.jpg",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_2.jpg",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_3.jpg",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_4.jpg"
     ],
     "sort_order": 4
   },
@@ -207,8 +207,8 @@ export const PRODUCTS: Product[] = [
     ],
     "name_en": "Steel Filing Cabinet 4 Doors Y08B",
     "images": [
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y08B_1.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y08B_2.jpg"
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y08B_1.jpg",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y08B_2.jpg"
     ],
     "sort_order": 5
   },
@@ -256,9 +256,9 @@ export const PRODUCTS: Product[] = [
     "featured": true,
     "stock_status": "in_stock",
     "images": [
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/MR01_1.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/MR01_2.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/MR01_3.jpg"
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/MR01_1.jpg",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/MR01_2.jpg",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/MR01_3.jpg"
     ],
     "sort_order": 7
   },

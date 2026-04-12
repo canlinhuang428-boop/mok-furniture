@@ -37,75 +37,6 @@
     ]
   },
   {
-    "id": "p_1776002179507",
-    "category_id": "cat_cabinet",
-    "name_th": "华东交大",
-    "name_en": "华东交大",
-    "name_zh": "fff",
-    "sku": "hj",
-    "size": "",
-    "images": [
-      "https://placehold.co/600x600/e2e8f0/475569?text=hj"
-    ],
-    "tags_th": [
-      "พร้อมส่ง"
-    ],
-    "tags_en": [
-      "In Stock"
-    ],
-    "tags_zh": [
-      "有货"
-    ],
-    "featured": false,
-    "stock_status": "in_stock"
-  },
-  {
-    "id": "p_1776002266248",
-    "category_id": "cat_cabinet",
-    "name_th": "rjfjTTV",
-    "name_en": "rjfjTTV",
-    "name_zh": "dhdjxjdndj",
-    "sku": "hj",
-    "size": "",
-    "images": [
-      "https://placehold.co/600x600/e2e8f0/475569?text=hj"
-    ],
-    "tags_th": [
-      "พร้อมส่ง"
-    ],
-    "tags_en": [
-      "In Stock"
-    ],
-    "tags_zh": [
-      "有货"
-    ],
-    "featured": false,
-    "stock_status": "in_stock"
-  },
-  {
-    "id": "p_1776002315765",
-    "category_id": "cat_cabinet",
-    "name_th": "tt天天",
-    "name_en": "tt天天",
-    "name_zh": "天天",
-    "sku": "订单",
-    "size": "那你",
-    "images": [
-      "https://placehold.co/600x600/e2e8f0/475569?text=订单"
-    ],
-    "tags_th": [
-      "พร้อมส่ง"
-    ],
-    "tags_en": [
-      "In Stock"
-    ],
-    "tags_zh": [
-      "有货"
-    ],
-    "featured": false,
-    "stock_status": "in_stock"
-  },
-  {
     "id": "B02A",
     "category": "bed",
     "sku": "B02A",
@@ -236,14 +167,14 @@
       "畅销款"
     ],
     "name_en": "Steel Filing Cabinet 2 Doors Y06A",
-    "images": [
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_1.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_2.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_3.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_4.jpg"
-    ],
     "sort_order": 4,
-    "image": "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y06A_1.jpg"
+    "image": "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_1.jpg",
+    "images": [
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://firebasestorage.googleapis.com/v0/b/th-mok.firebasestorage.app/o/products%2FY06A_1.jpg?alt=media",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_2.jpg",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_3.jpg",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_4.jpg"
+    ]
   },
   {
     "id": "Y08B",
@@ -272,12 +203,12 @@
       "畅销款"
     ],
     "name_en": "Steel Filing Cabinet 4 Doors Y08B",
-    "images": [
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y08B_1.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y08B_2.jpg"
-    ],
     "sort_order": 5,
-    "image": "https://storage.googleapis.com/th-mok.firebasestorage.app/products/Y08B_1.jpg"
+    "image": "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y08B_1.jpg",
+    "images": [
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://firebasestorage.googleapis.com/v0/b/th-mok.firebasestorage.app/o/products%2FY08B_1.jpg?alt=media",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y08B_2.jpg"
+    ]
   },
   {
     "id": "p2",
@@ -322,13 +253,13 @@
     ],
     "featured": true,
     "stock_status": "in_stock",
-    "images": [
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/MR01_1.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/MR01_2.jpg",
-      "https://storage.googleapis.com/th-mok.firebasestorage.app/products/MR01_3.jpg"
-    ],
     "sort_order": 7,
-    "image": "https://storage.googleapis.com/th-mok.firebasestorage.app/products/MR01_1.jpg"
+    "image": "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/MR01_1.jpg",
+    "images": [
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://firebasestorage.googleapis.com/v0/b/th-mok.firebasestorage.app/o/products%2FMR01_1.jpg?alt=media",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/MR01_2.jpg",
+      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/MR01_3.jpg"
+    ]
   },
   {
     "id": "p7",
