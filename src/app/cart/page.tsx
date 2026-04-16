@@ -254,7 +254,7 @@ function CartContent() {
           <div className="mt-4 text-center">
             <p className="text-sm text-gray-400 mb-2">หรือติดต่อแม่ค้าโดยตรง</p>
             <div className="flex justify-center gap-3">
-              <a href="https://line.me/ti/p/~MOKHomeware" target="_blank" className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm">LINE</a>
+              <a href="https://line.me/ti/p/@MOKHomeware" target="_blank" className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm">LINE</a>
               <a href="https://wa.me/66XXXXXXXXX" target="_blank" className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm">WhatsApp</a>
               <a href="https://m.me/MOKHomeware" target="_blank" className="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm">Messenger</a>
             </div>
