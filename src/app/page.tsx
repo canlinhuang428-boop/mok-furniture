@@ -255,11 +255,20 @@ function MOKApp() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // ==========================================
-  // 加载产品数据（静态文件，秒开）
+  // 加载产品数据（Firestore，持久保存）
   // ==========================================
   useEffect(() => {
-    setProducts(PRODUCTS as Product[]);
-    setLoading(false);
+    async function loadProducts() {
+      const snap = await getDocs(query(collection(db, "products"), orderBy("sort_order", "asc")));
+      if (snap.empty) {
+        // Firestore 为空则降级到静态文件
+        setProducts(PRODUCTS as Product[]);
+      } else {
+        setProducts(snap.docs.map(d => ({ id: d.id, ...d.data() } as Product)));
+      }
+      setLoading(false);
+    }
+    loadProducts();
   }, []);
 
   // ==========================================
