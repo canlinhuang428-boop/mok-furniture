@@ -149,7 +149,7 @@ export const PRODUCTS: Product[] = [
     "size": "85x39x180 cm",
     "price": 2890,
     "original_price": 3290,
-    "image": "https://placehold.co/600x400?text=Y06A",
+    "image": "https://files.catbox.moe/hb7enz.jpg",
     "status": true,
     "sort": 1,
     "tags": [
@@ -171,10 +171,10 @@ export const PRODUCTS: Product[] = [
     ],
     "name_en": "Steel Filing Cabinet 2 Doors Y06A",
     "images": [
-      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_1.jpg",
-      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_2.jpg",
-      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_3.jpg",
-      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y06A_4.jpg"
+      "https://files.catbox.moe/hb7enz.jpg",
+      "https://files.catbox.moe/gzhqwx.jpg",
+      "https://files.catbox.moe/4ja73d.jpg",
+      "https://files.catbox.moe/p4bk9b.jpg"
     ],
     "sort_order": 4
   },
@@ -186,7 +186,7 @@ export const PRODUCTS: Product[] = [
     "size": "120x45x180 cm",
     "price": 4590,
     "original_price": 5290,
-    "image": "https://placehold.co/600x400?text=Y08B",
+    "image": "https://files.catbox.moe/8m9vnh.jpg",
     "status": true,
     "sort": 2,
     "tags": [
@@ -207,8 +207,8 @@ export const PRODUCTS: Product[] = [
     ],
     "name_en": "Steel Filing Cabinet 4 Doors Y08B",
     "images": [
-      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y08B_1.jpg",
-      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/Y08B_2.jpg"
+      "https://files.catbox.moe/8m9vnh.jpg",
+      "https://files.catbox.moe/gbjpcy.jpg"
     ],
     "sort_order": 5
   },
@@ -256,9 +256,9 @@ export const PRODUCTS: Product[] = [
     "featured": true,
     "stock_status": "in_stock",
     "images": [
-      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/MR01_1.jpg",
-      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/MR01_2.jpg",
-      "https://pub-6fec257ce1fa5321a4fa21e2d8e87438.r2.cloudflarestorage.com/products/MR01_3.jpg"
+      "https://files.catbox.moe/95pm1z.jpg",
+      "https://files.catbox.moe/yem2fy.jpg",
+      "https://files.catbox.moe/m7eo44.jpg"
     ],
     "sort_order": 7
   },
