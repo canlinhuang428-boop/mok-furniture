@@ -259,12 +259,19 @@ function MOKApp() {
   // ==========================================
   useEffect(() => {
     async function loadProducts() {
-      const snap = await getDocs(query(collection(db, "products"), orderBy("sort_order", "asc")));
-      if (snap.empty) {
-        // Firestore 为空则降级到静态文件
+      try {
+        const snap = await getDocs(collection(db, "products"));
+        if (snap.empty) {
+          // Firestore 为空则降级到静态文件
+          setProducts(PRODUCTS as Product[]);
+        } else {
+          const prods = snap.docs.map(d => ({ id: d.id, ...d.data() } as Product));
+          prods.sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
+          setProducts(prods);
+        }
+      } catch (e) {
+        console.error("Firestore load error:", e);
         setProducts(PRODUCTS as Product[]);
-      } else {
-        setProducts(snap.docs.map(d => ({ id: d.id, ...d.data() } as Product)));
       }
       setLoading(false);
     }
