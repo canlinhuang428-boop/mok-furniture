@@ -401,7 +401,6 @@ function MOKApp() {
       tags_th: ["พร้อมส่ง"], tags_en: ["In Stock"], tags_zh: ["有货"],
       featured: false, stock_status: "in_stock",
       sort_order: 999,
-      created_at: new Date().toISOString(),
     };
     try {
       await setDoc(doc(db, "products", id), prod);
