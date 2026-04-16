@@ -249,6 +249,7 @@ function MOKApp() {
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerNote, setCustomerNote] = useState("");
   const [orderSent, setOrderSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [imgIdx, setImgIdx] = useState(0);
 
   const t = T[lang];
@@ -437,20 +438,24 @@ function MOKApp() {
   }
 
   async function submitOrder() {
-    if (!user || cart.length === 0) return;
-    const uid = user.uid;
-    await addDoc(collection(db, "orders"), {
-      user_id: uid,
-      name: customerName,
-      phone: customerPhone,
-      note: customerNote,
-      items: cart.map(i => ({ product_id: i.product.id, qty: i.qty })),
-      status: "pending",
-      created_at: new Date().toISOString(),
-    });
-    // 清空购物车
-    await syncCart([]);
-    setOrderSent(true);
+    if (cart.length === 0) return;
+    setSubmitting(true);
+    try {
+      await addDoc(collection(db, "orders"), {
+        name: customerName || "-",
+        phone: customerPhone || "-",
+        note: customerNote || "-",
+        items: cart.map(i => ({ product_id: i.product.id, qty: i.qty, sku: i.product.sku, name: getName(i.product) })),
+        status: "pending",
+        created_at: new Date().toISOString(),
+      });
+      await syncCart([]);
+      setOrderSent(true);
+    } catch (e: any) {
+      showToast("发送失败: " + (e?.message || "请重试"));
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   function handleCopyText() {
@@ -944,15 +949,15 @@ function MOKApp() {
                 className="w-full py-3 rounded-xl border-2 border-slate-200 text-gray-700 font-semibold text-sm flex items-center justify-center gap-2">
                 <Copy size={14} /> {t.copyBtn}
               </button>
-              <a href={`https://line.me/ti/p/~639isuyr`} target="_blank"
+              <a href={`https://line.me/ti/p/@639isuyr`} target="_blank"
                 className="w-full py-3 rounded-xl text-white font-semibold text-sm flex items-center justify-center gap-2"
                 style={{ backgroundColor: C.green }}>
                 <MessageCircle size={14} /> {t.lineBtn}
               </a>
-              <button onClick={submitOrder}
-                className="w-full py-3 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2"
+              <button onClick={submitOrder} disabled={submitting}
+                className="w-full py-3 rounded-xl text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-60"
                 style={{ backgroundColor: C.blue }}>
-                <CheckCircle2 size={14} /> {t.submitOrder}
+                {submitting ? "发送中..." : <><CheckCircle2 size={14} /> {t.submitOrder}</>}
               </button>
             </div>
           </>
