@@ -400,11 +400,17 @@ function MOKApp() {
       images: [img],
       tags_th: ["พร้อมส่ง"], tags_en: ["In Stock"], tags_zh: ["有货"],
       featured: false, stock_status: "in_stock",
+      sort_order: 999,
+      created_at: new Date().toISOString(),
     };
-    await setDoc(doc(db, "products", id), prod);
-    setProducts(prev => [...prev, prod]);
-    setNewProd({ category_id: "cat_cabinet", name_th: "", name_zh: "", sku: "", size: "", images: "" });
-    showToast(t.productSaved);
+    try {
+      await setDoc(doc(db, "products", id), prod);
+      setProducts(prev => [...prev, prod]);
+      setNewProd({ category_id: "cat_cabinet", name_th: "", name_zh: "", sku: "", size: "", images: "" });
+      showToast(t.productSaved);
+    } catch (e: any) {
+      showToast("บันทึกล้มเหลว: " + (e?.message || e));
+    }
   }
 
   async function handleDeleteProduct(id: string) {
