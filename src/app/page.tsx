@@ -135,7 +135,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [cart, setCart] = useState<{ product: Product; qty: number }[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(PRODUCTS as Product[]);
   const [toast, setToast] = useState<string | null>(null);
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
@@ -143,8 +143,6 @@ export default function Home() {
   const [orderSent, setOrderSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [imgIdx, setImgIdx] = useState(0);
-  const [showAdmin, setShowAdmin] = useState(false);
-
   const t = T[lang];
 
   useEffect(() => {
@@ -404,9 +402,9 @@ export default function Home() {
             )}
           </div>
 
-          {/* Admin */}
+          {/* Footer nav */}
           <div className="px-5 mt-12 mb-10">
-            <button onClick={() => setShowAdmin(!showAdmin)}
+            <button onClick={() => setView("cart")}
               className="w-full text-center text-[11px] uppercase tracking-widest text-slate-400 py-3 flex items-center justify-center gap-1.5 hover:text-slate-600">
               <Settings size={12} /> {t.viewList}
             </button>
