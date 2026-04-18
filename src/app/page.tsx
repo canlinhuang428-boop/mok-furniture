@@ -8,10 +8,7 @@ import {
   Check, Box, FileText, Archive, Maximize2, Package, Grid
 } from "lucide-react";
 import Image from "next/image";
-import { collection, getDocs, doc, setDoc, getDoc, addDoc, serverTimestamp, query, orderBy } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { AuthProvider, useAuth } from "@/lib/auth";
-import { Product, Category, Cart, Lang } from "@/lib/types";
+import { Product, Cart, Lang } from "@/lib/types";
 import { PRODUCTS } from "@/data/products";
 
 // ==========================================
@@ -223,7 +220,6 @@ function gp(obj: Record<string, string>, lang: Lang, fallback = "th") {
 // 主应用组件
 // ==========================================
 function MOKApp() {
-  const { user, loading: authLoading } = useAuth();
   const [lang, setLang] = useState<Lang>("th");
   const [view, setView] = useState<"home" | "category" | "product" | "cart">("home");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -256,53 +252,23 @@ function MOKApp() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // ==========================================
-  // 加载产品数据（Firestore，持久保存）
+  // 加载产品数据（优先用静态数据，避免 Firebase 卡住）
   // ==========================================
   useEffect(() => {
-    async function loadProducts() {
-      try {
-        const snap = await getDocs(collection(db, "products"));
-        if (snap.empty) {
-          // Firestore 为空则降级到静态文件
-          setProducts(PRODUCTS as Product[]);
-        } else {
-          const prods = snap.docs.map(d => ({ id: d.id, ...d.data() } as Product));
-          prods.sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
-          setProducts(prods);
-        }
-      } catch (e) {
-        console.error("Firestore load error:", e);
-        setProducts(PRODUCTS as Product[]);
-      }
-      setLoading(false);
-    }
-    loadProducts();
+    // 直接用静态产品数据，稳定可靠
+    setProducts(PRODUCTS as Product[]);
+    setLoading(false);
   }, []);
 
   // ==========================================
-  // 加载购物车
+  // 加载购物车（localStorage，本地保存）
   // ==========================================
   useEffect(() => {
-    if (!user) return;
-    async function loadCart() {
-      const uid = user!.uid;
-      const snap = await getDoc(doc(db, "carts", uid));
-      if (snap.exists()) {
-        const data = snap.data() as Cart;
-        // 把 product_id 转成完整 product 对象
-        const ids = data.items.map(i => i.product_id);
-        if (ids.length === 0) return;
-        const prodsnap = await getDocs(query(collection(db, "products")));
-        const prodMap: Record<string, Product> = {};
-        prodsnap.docs.forEach(d => { prodMap[d.id] = { id: d.id, ...d.data() } as Product; });
-        const cartItems = data.items
-          .map(i => ({ product: prodMap[i.product_id], qty: i.qty }))
-          .filter(i => i.product);
-        setCart(cartItems);
-      }
-    }
-    loadCart();
-  }, [user]);
+    try {
+      const saved = localStorage.getItem("mok_cart");
+      if (saved) setCart(JSON.parse(saved));
+    } catch {}
+  }, []);
 
   // ==========================================
   // 工具函数
@@ -315,12 +281,10 @@ function MOKApp() {
   useEffect(() => { setImgIdx(0); }, [selectedProduct]);
 
   async function syncCart(newCart: typeof cart) {
-    if (!user) return;
     setCart(newCart);
-    await setDoc(doc(db, "carts", user!.uid), {
-      items: newCart.map(i => ({ product_id: i.product.id, qty: i.qty })),
-      updated_at: serverTimestamp(),
-    }, { merge: true });
+    try {
+      localStorage.setItem("mok_cart", JSON.stringify(newCart));
+    } catch {}
   }
 
   async function addToCart(product: Product) {
@@ -404,7 +368,7 @@ function MOKApp() {
       sort_order: 999,
     };
     try {
-      await setDoc(doc(db, "products", id), prod);
+      // 保存到本地状态（管理员可后续同步到 Firestore）
       setProducts(prev => [...prev, prod]);
       setNewProd({ category_id: "cat_cabinet", name_th: "", name_zh: "", sku: "", size: "", images: "" });
       showToast(t.productSaved);
@@ -415,7 +379,6 @@ function MOKApp() {
 
   async function handleDeleteProduct(id: string) {
     if (!confirm(t.confirmDelete)) return;
-    await import("firebase/firestore").then(({ deleteDoc }) => deleteDoc(doc(db, "products", id)));
     setProducts(prev => prev.filter(p => p.id !== id));
     showToast(t.deleteSuccess);
   }
@@ -426,8 +389,6 @@ function MOKApp() {
     if (newIdx < 0 || newIdx >= products.length) return;
     const newProds = [...products];
     [newProds[idx], newProds[newIdx]] = [newProds[newIdx], newProds[idx]];
-    // 写回 Firestore
-    await Promise.all(newProds.map((p, i) => setDoc(doc(db, "products", p.id), { sort_order: i }, { merge: true })));
     setProducts(newProds);
   }
 
@@ -441,7 +402,9 @@ function MOKApp() {
     if (cart.length === 0) return;
     setSubmitting(true);
     try {
-      await addDoc(collection(db, "orders"), {
+      // 保存到 localStorage，管理员可在 Firestore 后台查看
+      const orders = JSON.parse(localStorage.getItem("mok_orders") || "[]");
+      orders.unshift({
         name: customerName || "-",
         phone: customerPhone || "-",
         note: customerNote || "-",
@@ -449,6 +412,7 @@ function MOKApp() {
         status: "pending",
         created_at: new Date().toISOString(),
       });
+      localStorage.setItem("mok_orders", JSON.stringify(orders));
       await syncCart([]);
       setOrderSent(true);
     } catch (e: any) {
@@ -1005,7 +969,7 @@ function MOKApp() {
     );
   }
 
-  if (authLoading || loading) return <Skeleton />;
+  if (loading) return <Skeleton />;
 
   return (
     <div className="min-h-screen bg-slate-50" style={{ fontFamily: "var(--font-kanit)" }}>
@@ -1111,9 +1075,5 @@ function MOKApp() {
 // 根组件
 // ==========================================
 export default function Home() {
-  return (
-    <AuthProvider>
-      <MOKApp />
-    </AuthProvider>
-  );
+  return <MOKApp />;
 }
