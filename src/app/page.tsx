@@ -143,6 +143,46 @@ export default function Home() {
   const [orderSent, setOrderSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [imgIdx, setImgIdx] = useState(0);
+  const [showAdminAuth, setShowAdminAuth] = useState(false);
+  const [adminPwd, setAdminPwd] = useState("");
+  const [adminError, setAdminError] = useState(false);
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [newProd, setNewProd] = useState({ category_id: "cat_cabinet", name_th: "", name_zh: "", sku: "", size: "", images: "" });
+
+  function handleAdminLogin() {
+    if (adminPwd === "admin123") { setShowAdmin(false); setShowAdminAuth(false); setShowAdmin(true); setAdminPwd(""); setAdminError(false); }
+    else { setAdminError(true); }
+  }
+
+  function handleAddProduct() {
+    if (!newProd.name_th || !newProd.sku) { showToastMsg("กรุณากรอกชื่อและ SKU"); return; }
+    const id = "p_" + Date.now();
+    const img = newProd.images || `https://placehold.co/600x600/e2e8f0/475569?text=${newProd.sku}`;
+    const prod: Product = { id, category_id: newProd.category_id, name_th: newProd.name_th, name_en: newProd.name_th, name_zh: newProd.name_zh || newProd.name_th, sku: newProd.sku, size: newProd.size || "", images: [img], tags_th: ["พร้อมส่ง"], tags_en: ["In Stock"], tags_zh: ["有货"], featured: false, stock_status: "in_stock", sort_order: 999 };
+    setProducts(prev => [...prev, prod]);
+    setNewProd({ category_id: "cat_cabinet", name_th: "", name_zh: "", sku: "", size: "", images: "" });
+    showToastMsg("บันทึกสินค้าสำเร็จ!");
+  }
+
+  function handleDeleteProduct(id: string) {
+    if (!confirm("ยืนยันการลบสินค้านี้?")) return;
+    setProducts(prev => prev.filter(p => p.id !== id));
+    showToastMsg("ลบสินค้าแล้ว");
+  }
+
+  function handleMoveProduct(id: string, dir: -1 | 1) {
+    const idx = products.findIndex(p => p.id === id);
+    const newIdx = idx + dir;
+    if (newIdx < 0 || newIdx >= products.length) return;
+    const newProds = [...products];
+    [newProds[idx], newProds[newIdx]] = [newProds[newIdx], newProds[idx]];
+    setProducts(newProds);
+  }
+
+  function handleExportJSON() {
+    const a = document.createElement("a"); a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(products, null, 2)); a.download = "mok_products.json"; a.click();
+  }
+
   const t = T[lang];
 
   useEffect(() => {
@@ -402,12 +442,69 @@ export default function Home() {
             )}
           </div>
 
-          {/* Footer nav */}
+          {/* Admin */}
           <div className="px-5 mt-12 mb-10">
-            <button onClick={() => setView("cart")}
-              className="w-full text-center text-[11px] uppercase tracking-widest text-slate-400 py-3 flex items-center justify-center gap-1.5 hover:text-slate-600">
-              <Settings size={12} /> {t.viewList}
-            </button>
+            {!showAdmin ? (
+              <div>
+                {showAdminAuth && (
+                  <div className="bg-white rounded-2xl p-4 mb-2">
+                    <input type="password" placeholder="รหัสผ่านแอดมิน" value={adminPwd}
+                      onChange={e => { setAdminPwd(e.target.value); setAdminError(false); }}
+                      className={`w-full border rounded-xl px-3 py-2 text-sm mb-2 ${adminError ? "border-red-400" : "border-slate-200"}`}
+                      onKeyDown={e => e.key === "Enter" && handleAdminLogin()} />
+                    {adminError && <p className="text-red-500 text-xs mb-2">รหัสผ่านไม่ถูกต้อง</p>}
+                    <button onClick={handleAdminLogin} className="w-full bg-blue-500 text-white py-2 rounded-xl text-sm font-semibold">เข้าสู่โหมดแอดมิน</button>
+                  </div>
+                )}
+                <button onClick={() => setShowAdminAuth(!showAdminAuth)}
+                  className="w-full text-center text-[11px] uppercase tracking-widest text-slate-400 py-3 flex items-center justify-center gap-1.5 hover:text-slate-600">
+                  <Settings size={12} /> {showAdminAuth ? "ปิด" : "เข้าสู่โหมดแอดมิน"}
+                </button>
+              </div>
+            ) : (
+              <div className="bg-white rounded-2xl p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <p className="font-bold text-gray-700 text-sm">⚙️ โหมดแอดมิน ({products.length} สินค้า)</p>
+                  <button onClick={() => setShowAdmin(false)} className="text-gray-400 hover:text-gray-600"><X size={16} /></button>
+                </div>
+                {/* Add Product Form */}
+                <div className="bg-slate-50 rounded-xl p-4 mb-4">
+                  <p className="text-xs font-bold text-gray-500 uppercase mb-3">+ เพิ่มสินค้าใหม่</p>
+                  <div className="space-y-2">
+                    <input value={newProd.name_th} onChange={e => setNewProd({ ...newProd, name_th: e.target.value })} placeholder="ชื่อสินค้า (TH)" className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white" />
+                    <input value={newProd.name_zh} onChange={e => setNewProd({ ...newProd, name_zh: e.target.value })} placeholder="ชื่อสินค้า (ZH)" className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white" />
+                    <input value={newProd.sku} onChange={e => setNewProd({ ...newProd, sku: e.target.value })} placeholder="SKU *" className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white" />
+                    <input value={newProd.size} onChange={e => setNewProd({ ...newProd, size: e.target.value })} placeholder="ขนาด (เช่น 85x39x180 cm)" className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white" />
+                    <input value={newProd.images} onChange={e => setNewProd({ ...newProd, images: e.target.value })} placeholder="ลิงก์รูปภาพ" className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white" />
+                    <button onClick={handleAddProduct} className="w-full bg-blue-500 text-white py-2 rounded-xl text-sm font-semibold flex items-center justify-center gap-2">
+                      <Check size={14} /> บันทึกสินค้า
+                    </button>
+                  </div>
+                </div>
+                {/* Actions */}
+                <button onClick={handleExportJSON} className="w-full bg-slate-800 text-white py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 mb-3">
+                  <Download size={12} /> Export JSON
+                </button>
+                {/* Product List */}
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {products.map((p, i) => (
+                    <div key={p.id} className="flex items-center gap-2 bg-slate-50 rounded-lg px-3 py-2">
+                      <span className="text-xs font-bold text-gray-300 w-5 text-center shrink-0">{i + 1}</span>
+                      <img src={p.images?.[0] || p.image || `https://placehold.co/40?text=${p.sku}`} alt="" className="w-8 h-8 rounded object-cover bg-gray-200 shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold truncate">{p.name_th}</p>
+                        <p className="text-[10px] text-gray-400">{p.sku}</p>
+                      </div>
+                      <div className="flex items-center gap-0.5 shrink-0">
+                        <button onClick={() => handleMoveProduct(p.id, -1)} className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-blue-600 rounded"><ArrowUp size={12} /></button>
+                        <button onClick={() => handleMoveProduct(p.id, 1)} className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-blue-600 rounded"><ArrowDown size={12} /></button>
+                        <button onClick={() => handleDeleteProduct(p.id)} className="w-6 h-6 flex items-center justify-center text-red-300 hover:text-red-600 rounded"><Trash2 size={12} /></button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ) : (
