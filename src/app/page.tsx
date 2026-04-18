@@ -1106,5 +1106,15 @@ function MOKApp() {
 // 根组件
 // ==========================================
 export default function Home() {
-  return <MOKApp />;
+  try {
+    return <MOKApp />;
+  } catch (e: any) {
+    console.error("[Home] Render error:", e);
+    return (
+      <div style={{ fontFamily: "system-ui", textAlign: "center", padding: "60px 20px", minHeight: "100vh", background: "#f8fafc" }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: "#1e293b", marginBottom: 8 }}>เกิดข้อผิดพลาด</h2>
+        <p style={{ color: "#64748b", fontSize: 14 }}>กรุณาลองรีเฟรชหน้าเว็บ</p>
+      </div>
+    );
+  }
 }
