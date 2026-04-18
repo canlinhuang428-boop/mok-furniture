@@ -252,12 +252,31 @@ function MOKApp() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // ==========================================
-  // 加载产品数据（优先用静态数据，避免 Firebase 卡住）
+  // 加载产品数据（静态优先，Firestore 做增量更新）
   // ==========================================
   useEffect(() => {
-    // 直接用静态产品数据，稳定可靠
+    // 先显示静态数据（保证页面能立即渲染）
     setProducts(PRODUCTS as Product[]);
     setLoading(false);
+
+    // 再尝试从 Firestore 加载最新产品（静默失败不崩溃）
+    async function loadFromFirestore() {
+      try {
+        const { getDocs, collection: coll, query: q, orderBy: ob } = await import("firebase/firestore");
+        const { getFirebaseDb } = await import("@/lib/firebase");
+        const db = getFirebaseDb();
+        if (!db) return;
+        const snap = await getDocs(q(coll(db, "products"), ob("sort_order", "asc")));
+        if (!snap.empty) {
+          const prods = snap.docs.map(d => ({ id: d.id, ...d.data() } as Product));
+          setProducts(prods);
+        }
+      } catch (e) {
+        // Firestore 失败就用静态数据，不崩溃
+        console.warn("[Products] Firestore load failed, using static data:", e);
+      }
+    }
+    loadFromFirestore();
   }, []);
 
   // ==========================================
