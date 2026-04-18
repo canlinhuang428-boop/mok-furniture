@@ -14,13 +14,21 @@ const AuthContext = createContext<AuthContextType>({ user: null, loading: true }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false); // 默认false，让产品先显示
+  const [loading, setLoading] = useState(true); // 先等 auth 稳定，超时兜底
 
   useEffect(() => {
     let cancelled = false;
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    // 超时兜底：5秒后强制结束 loading
+    timeoutId = setTimeout(() => {
+      if (!cancelled) setLoading(false);
+    }, 5000);
+
     try {
       const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
         if (cancelled) return;
+        clearTimeout(timeoutId);
         if (firebaseUser) {
           setUser(firebaseUser);
           setLoading(false);
@@ -31,9 +39,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             .finally(() => { if (!cancelled) setLoading(false); });
         }
       });
-      return () => { cancelled = true; unsubscribe(); };
+      return () => { cancelled = true; clearTimeout(timeoutId); unsubscribe(); };
     } catch {
-      if (!cancelled) setLoading(false);
+      if (!cancelled) { clearTimeout(timeoutId); setLoading(false); }
     }
   }, []);
 

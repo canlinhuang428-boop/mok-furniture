@@ -19,24 +19,36 @@ async function r2(method, path, body, ct) {
 }
 
 async function main() {
-  // 1. List objects in bucket
-  console.log("=== Listing bucket objects ===");
-  const list = await r2("GET", "/?list=1", null);
+  // 1. List ALL objects in bucket using ListObjectsV2
+  console.log("=== Listing ALL bucket objects (V2) ===");
+  const list = await r2("GET", "/?list-type=2&max-keys=1000", null);
   console.log("Status:", list.status);
-  console.log("Body preview:", list.body.substring(0, 300));
+  // Extract all keys
+  const keys = list.body.match(/<Key>(.*?)<\/Key>/g) || [];
+  console.log("All files:", keys.map(k => k.replace(/<Key>|\<\/Key>/g, '')).join('\n'));
   
   // 2. Check if we can GET an object (should work with auth)
   console.log("\n=== GET object with auth ===");
   const get = await r2("GET", "/products/Y06A_1.jpg", null);
   console.log("Status:", get.status);
   console.log("Body length:", get.body.length, "bytes");
-  console.log("Content preview:", get.body.substring(0, 50));
+  // Show if it's HTML (error page) or actual image bytes
+  const isHTML = get.body.startsWith('<!doctype') || get.body.startsWith('<html');
+  console.log("Is HTML error page:", isHTML);
+  if (isHTML) {
+    console.log("HTML preview:", get.body.substring(0, 200));
+  } else {
+    console.log("Image preview (hex):", get.body.substring(0, 50).charCodeAt(0).toString(16));
+  }
   
-  // 3. Try public URL (no auth)
-  console.log("\n=== Testing public URL (no auth) ===");
-  const pub = await fetch(`https://pub-${ACCOUNT_ID}.r2.cloudflarestorage.com/products/Y06A_1.jpg`);
-  console.log("Public URL status:", pub.status);
-  console.log("Public URL content-type:", pub.headers.get("content-type"));
+  // 3. Try mage/ prefix
+  console.log("\n=== GET object with mage/ prefix ===");
+  const get2 = await r2("GET", "/mage/products/Y06A_1.jpg", null);
+  console.log("Status:", get2.status);
+  console.log("Body length:", get2.body.length, "bytes");
+  const isHTML2 = get2.body.startsWith('<!doctype') || get2.body.startsWith('<html');
+  console.log("Is HTML error page:", isHTML2);
+  if (isHTML2) console.log("HTML preview:", get2.body.substring(0, 200));
 }
 
 main().catch(console.error);
