@@ -156,17 +156,35 @@ export default function Home() {
 
   function handleAddProduct() {
     if (!newProd.name_th || !newProd.sku) { showToastMsg("กรุณากรอกชื่อและ SKU"); return; }
-    const id = "p_" + Date.now();
     const img = newProd.images || `https://placehold.co/600x600/e2e8f0/475569?text=${newProd.sku}`;
-    const prod: Product = { id, category_id: newProd.category_id, name_th: newProd.name_th, name_en: newProd.name_th, name_zh: newProd.name_zh || newProd.name_th, sku: newProd.sku, size: newProd.size || "", images: [img], tags_th: ["พร้อมส่ง"], tags_en: ["In Stock"], tags_zh: ["有货"], featured: false, stock_status: "in_stock", sort_order: 999 };
+    const prod: Product = { id: "", category_id: newProd.category_id, name_th: newProd.name_th, name_en: newProd.name_th, name_zh: newProd.name_zh || newProd.name_th, sku: newProd.sku, size: newProd.size || "", images: [img], tags_th: ["พร้อมส่ง"], tags_en: ["In Stock"], tags_zh: ["有货"], featured: false, stock_status: "in_stock", sort_order: 999 };
     setProducts(prev => [...prev, prod]);
+    // Save to Firestore via API
+    fetch("/api/admin/products", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-admin-pwd": "admin123" },
+      body: JSON.stringify(prod),
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data.id) {
+          setProducts(prev => prev.map(p => p.sku === prod.sku ? { ...p, id: data.id } : p));
+          showToastMsg("บันทึกสินค้าสำเร็จ! ✅ รีเฟรชหน้าจะเห็นสินค้าใหม่");
+        } else {
+          showToastMsg("บันทึกไม่สำเร็จ: " + (data.error || ""));
+        }
+      })
+      .catch(() => showToastMsg("เซฟไม่สำเร็จ ลองอีกครั้ง"));
     setNewProd({ category_id: "cat_cabinet", name_th: "", name_zh: "", sku: "", size: "", images: "" });
-    showToastMsg("บันทึกสินค้าสำเร็จ!");
   }
 
   function handleDeleteProduct(id: string) {
     if (!confirm("ยืนยันการลบสินค้านี้?")) return;
     setProducts(prev => prev.filter(p => p.id !== id));
+    fetch(`/api/admin/products?id=${id}`, {
+      method: "DELETE",
+      headers: { "x-admin-pwd": "admin123" },
+    }).catch(() => {});
     showToastMsg("ลบสินค้าแล้ว");
   }
 
@@ -177,6 +195,17 @@ export default function Home() {
     const newProds = [...products];
     [newProds[idx], newProds[newIdx]] = [newProds[newIdx], newProds[idx]];
     setProducts(newProds);
+    // Save new sort_order to Firestore for moved items
+    const updates = [newProds[idx], newProds[newIdx]];
+    updates.forEach((p, i) => {
+      if (p.id) {
+        fetch("/api/admin/products", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json", "x-admin-pwd": "admin123" },
+          body: JSON.stringify({ id: p.id, sort_order: (newIdx + i - dir) }),
+        }).catch(() => {});
+      }
+    });
   }
 
   function handleExportJSON() {
