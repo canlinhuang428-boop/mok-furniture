@@ -149,6 +149,29 @@ export default function Home() {
 
   useEffect(() => {
     setProducts(PRODUCTS as Product[]);
+    // 尝试从 Firestore REST API 加载真实产品
+    fetch("https://firestore.googleapis.com/v1/projects/th-mok/databases/(default)/documents/products?pageSize=100")
+      .then(r => r.json())
+      .then(data => {
+        const docs = data.documents || [];
+        if (!docs.length) return;
+        const prods = docs.map((doc: any) => {
+          const f = doc.fields || {};
+          const p: any = { id: doc.name.split("/").pop() };
+          for (const [k, v] of Object.entries(f)) {
+            const val = v as any;
+            if (val.stringValue !== undefined) p[k] = val.stringValue;
+            else if (val.integerValue !== undefined) p[k] = Number(val.integerValue);
+            else if (val.doubleValue !== undefined) p[k] = Number(val.doubleValue);
+            else if (val.booleanValue !== undefined) p[k] = val.booleanValue;
+            else if (val.arrayValue?.values) p[k] = val.arrayValue.values.map((x: any) => x.stringValue || x.integerValue);
+          }
+          return p as Product;
+        });
+        prods.sort((a: Product, b: Product) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
+        setProducts(prods);
+      })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
