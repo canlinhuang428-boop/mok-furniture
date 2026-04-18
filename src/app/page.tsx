@@ -252,27 +252,43 @@ function MOKApp() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // ==========================================
-  // 加载产品数据（静态优先，API 路由做兜底）
+  // 加载产品数据（静态优先，Firestore REST API 增量更新）
   // ==========================================
   useEffect(() => {
     // 先显示静态数据（保证页面能立即渲染）
     setProducts(PRODUCTS as Product[]);
     setLoading(false);
 
-    // 通过服务端 API 路由加载 Firestore 产品（绕过客户端 SDK）
-    async function loadFromApi() {
+    // 通过 Firestore REST API 加载真实产品
+    async function loadFromRest() {
       try {
-        const res = await fetch("/api/products");
+        const res = await fetch(
+          "https://firestore.googleapis.com/v1/projects/th-mok/databases/(default)/documents/products?pageSize=100"
+        );
+        if (!res.ok) throw new Error("Firestore REST failed: " + res.status);
         const data = await res.json();
-        if (data.products && data.products.length > 0) {
-          setProducts(data.products as Product[]);
-        }
+        const docs = data.documents || [];
+        if (docs.length === 0) return;
+        const prods = docs.map((doc: any) => {
+          const f = doc.fields || {};
+          const p: any = { id: doc.name.split("/").pop() };
+          for (const [k, v] of Object.entries(f)) {
+            const val = v as any;
+            if (val.stringValue !== undefined) p[k] = val.stringValue;
+            else if (val.integerValue !== undefined) p[k] = Number(val.integerValue);
+            else if (val.doubleValue !== undefined) p[k] = Number(val.doubleValue);
+            else if (val.booleanValue !== undefined) p[k] = val.booleanValue;
+            else if (val.arrayValue?.values) p[k] = val.arrayValue.values.map((x: any) => x.stringValue || x.integerValue);
+          }
+          return p as Product;
+        });
+        prods.sort((a: Product, b: Product) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
+        setProducts(prods);
       } catch (e) {
-        // API 失败就用静态数据，不崩溃
-        console.warn("[Products] API load failed, using static data:", e);
+        console.warn("[Products] REST load failed, using static:", e);
       }
     }
-    loadFromApi();
+    loadFromRest();
   }, []);
 
   // ==========================================
