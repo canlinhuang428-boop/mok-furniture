@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
+import { getFirebaseAuth } from "./firebase";
 
 interface AuthContextType {
   user: User | null;
@@ -18,26 +18,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let cancelled = false;
-    let timeoutId: ReturnType<typeof setTimeout>;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
     // 5秒超时兜底
     timeoutId = setTimeout(() => {
       if (!cancelled) setLoading(false);
     }, 5000);
 
-    // 捕获 Firebase SDK 抛出的未处理 Promise 拒绝
     function handleRejection(event: PromiseRejectionEvent) {
       if (cancelled) return;
       event.preventDefault();
       event.stopPropagation();
-      console.warn("[Auth] Unhandled promise rejection:", event.reason);
+      console.warn("[Auth] Unhandled rejection:", event.reason);
+      clearTimeout(timeoutId);
       setLoading(false);
     }
 
     window.addEventListener("unhandledrejection", handleRejection);
 
+    // 延迟初始化 Firebase Auth，避免模块加载时崩溃
+    let cleanup: (() => void) | undefined;
     try {
-      const unsubscribe = onAuthStateChanged(
+      const auth = getFirebaseAuth();
+      cleanup = onAuthStateChanged(
         auth,
         (firebaseUser) => {
           if (cancelled) return;
@@ -64,13 +67,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
       );
-
-      return () => {
-        cancelled = true;
-        clearTimeout(timeoutId);
-        window.removeEventListener("unhandledrejection", handleRejection);
-        unsubscribe();
-      };
     } catch (err: any) {
       if (!cancelled) {
         console.warn("[Auth] Init error:", err?.message);
@@ -78,6 +74,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setLoading(false);
       }
     }
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timeoutId);
+      window.removeEventListener("unhandledrejection", handleRejection);
+      cleanup?.();
+    };
   }, []);
 
   return (

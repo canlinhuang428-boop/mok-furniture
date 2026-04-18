@@ -12,10 +12,37 @@ const firebaseConfig = {
   appId: "1:728006418720:web:e57eef237a3d8e66397745",
 };
 
-// 初始化 Firebase（防止热更新重复初始化）
-const app: FirebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+// 模块级单例（延迟初始化）
+let _app: FirebaseApp | null = null;
+let _auth: Auth | null = null;
+let _db: Firestore | null = null;
+let _storage: FirebaseStorage | null = null;
 
-export const auth: Auth = getAuth(app);
-export const db: Firestore = getFirestore(app);
-export const storage: FirebaseStorage = getStorage(app);
-export default app;
+function getApp(): FirebaseApp {
+  if (!_app) {
+    const apps = getApps();
+    _app = apps.length > 0 ? apps[0] : initializeApp(firebaseConfig);
+  }
+  return _app;
+}
+
+export function getFirebaseAuth(): Auth {
+  if (!_auth) _auth = getAuth(getApp());
+  return _auth;
+}
+
+export function getFirebaseDb(): Firestore {
+  if (!_db) _db = getFirestore(getApp());
+  return _db;
+}
+
+export function getFirebaseStorage(): FirebaseStorage {
+  if (!_storage) _storage = getStorage(getApp());
+  return _storage;
+}
+
+// 兼容旧代码（lazy getter，在 client 环境调用）
+export const auth: Auth = (typeof window !== "undefined" ? getFirebaseAuth() : null) as Auth;
+export const db: Firestore = (typeof window !== "undefined" ? getFirebaseDb() : null) as Firestore;
+export const storage: FirebaseStorage = (typeof window !== "undefined" ? getFirebaseStorage() : null) as FirebaseStorage;
+export default getApp;
